@@ -41,8 +41,9 @@ export default {
     }
   },
   mounted () {
-    var _this = this;
-    var timer = null;
+    let _this = this;
+    let timer = null;
+    let start = 0;
     // 滚轮处理
     function scrollHandler (direction) {
       // 防止重复触发滚动事件
@@ -59,7 +60,7 @@ export default {
         timer = null;
       }, 500);
     }
-    // 添加监听滚轮事件
+    // 监听滚轮事件
     window.addEventListener('mousewheel',function (event) {   // IE/Opera/Chrome
       let direction = event.wheelDelta > 0 ? 'up':'down';
       scrollHandler(direction);
@@ -68,6 +69,24 @@ export default {
       let direction = event.detail > 0 ? 'up':'down';
       scrollHandler(direction);
     },false);
+    // 移动端触摸事件处理
+    window.addEventListener('touchstart', function (event) {
+      start = event.touches[0].clientY;
+    })
+    window.addEventListener('touchmove', function (event) {
+      event.preventDefault();
+    })
+    window.addEventListener('touchend', function (event) {
+      let spacing = event.changedTouches[0].clientY - start;
+      let direction;      
+      if (spacing > 50) {
+        direction = 'up';
+        scrollHandler(direction);
+      } else if (spacing < -50) {
+        direction = 'down';
+        scrollHandler(direction);
+      }
+    })
   }
 }
 </script>

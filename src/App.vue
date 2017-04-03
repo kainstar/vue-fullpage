@@ -8,7 +8,7 @@
           <a href="https://github.com/vuejs/vue-cli" target="_blank">vue-cli</a>、
           <a href="https://github.com/vuejs-templates/webpack-simple" target="_blank">webpack-simple模板</a>
         </p>
-        <p class="demo-intro">支持：导航条滚动，滚轮滚动（触屏滚动正在开发中）</p>
+        <p class="demo-intro">支持：导航条滚动，滚轮滚动，触摸滚动</p>
       </section>
     </page>
     <page :currentPage="currentPage">
