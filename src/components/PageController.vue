@@ -1,0 +1,125 @@
+<template>
+    <nav class="controller">
+        <button class="prev-btn" @click="changePage(prevIndex)"></button>
+        <ul>
+            <li @click="changePage(index)" v-for="index in pageNum" :key="'controller-'+index" class="controller-item"></li>
+        </ul>
+        <button class="next-btn" @click="changePage(nextIndex)"></button>
+    </nav>
+</template>
+
+<script>
+export default {
+  name: 'page-controller',
+  props: {
+    pageNum: Number,
+    currentPage: Number
+  },
+  methods: {
+    changePage (index) {
+      this.$emit('changePage', index);
+    }
+  },
+  computed: {
+    nextIndex () {
+      let nextIndex = this.currentPage;
+      if (nextIndex === this.pageNum) {
+        nextIndex = 1;
+      } else {
+        nextIndex++;
+      }
+      return nextIndex;
+    },
+    prevIndex () {
+      let prevIndex = this.currentPage;
+      if (prevIndex === 1) {
+        prevIndex = this.pageNum;
+      } else {
+        prevIndex--;
+      }
+      return prevIndex;
+    }
+  },
+  mounted () {
+    var _this = this;
+    var timer = null;
+    // 滚轮处理
+    function scrollHandler (direction) {
+      // 防止重复触发滚动事件
+      if (timer != null) {
+        return;
+      }
+      if (direction === 'down') {
+        _this.changePage(_this.nextIndex);
+      } else {
+        _this.changePage(_this.prevIndex);
+      }
+      timer = setTimeout(function() {
+        clearTimeout(timer);
+        timer = null;
+      }, 500);
+    }
+    // 添加监听滚轮事件
+    window.addEventListener('mousewheel',function (event) {   // IE/Opera/Chrome
+      let direction = event.wheelDelta > 0 ? 'up':'down';
+      scrollHandler(direction);
+    },false);
+    window.addEventListener('DOMMouseScroll',function (event) {   // Firefox
+      let direction = event.detail > 0 ? 'up':'down';
+      scrollHandler(direction);
+    },false);
+  }
+}
+</script>
+
+<style>
+.controller {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+}
+.controller ul {
+    transform: translate3d(0,-50%,0);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.controller-item {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-top: 10px;
+    background-color: rgba(255, 255, 255, 0.3);
+    transition: background-color 0.3s ease 0s;
+}
+.controller-item:hover {
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.prev-btn,.next-btn {
+  cursor: pointer;
+  display: block;
+  text-align: center;
+  width: 20px;
+  height: 20px;
+  position: fixed;
+  left: 50%;
+  margin-left: -10px;
+  border: 4px solid #fff;
+  background-color: transparent;
+  outline: none;
+}
+.next-btn {
+  bottom: 80px;
+  transform: rotate(45deg);
+  border-top-color: transparent;
+  border-left-color: transparent;
+}
+.prev-btn {
+  top: 80px;
+  transform: rotate(-45deg);
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+}
+</style>
