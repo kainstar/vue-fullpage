@@ -36,10 +36,13 @@ npm run build
 - currentPage:
 表示当前显示的页面，通过设置currentPage可以改变初始显示的界面
 
+- arrowsType:
+表示页面控制器的上下箭头显示类型：no（不显示箭头）、normal（显示箭头）、animate（显示有动画效果的箭头）
+
 - options:
 该属性是一个数组，数组的每一项都是一个对象，通过设置对象内的值，可以改变对应的page组件的样式
 
-1. bgColor: 表示相应page的背景颜色
+1. background: 表示相应page的背景样式
 
 2. color: 表示相应page的文字颜色（可以手动设置css样式覆盖）
 

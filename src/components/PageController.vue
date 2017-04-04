@@ -1,10 +1,10 @@
 <template>
     <nav class="controller">
-        <button class="prev-btn" @click="changePage(prevIndex)"></button>
+        <button v-if="arrowsType != 'no'" class="prev-btn" :class="{moving:arrowsType === 'animate'}" @click="changePage(prevIndex)"></button>
         <ul>
             <li @click="changePage(index)" v-for="index in pageNum" :key="'controller-'+index" class="controller-item"></li>
         </ul>
-        <button class="next-btn" @click="changePage(nextIndex)"></button>
+        <button v-if="arrowsType != 'no'" class="next-btn" :class="{moving:arrowsType === 'animate'}" @click="changePage(nextIndex)"></button>
     </nav>
 </template>
 
@@ -13,7 +13,11 @@ export default {
   name: 'page-controller',
   props: {
     pageNum: Number,
-    currentPage: Number
+    currentPage: Number,
+    arrowsType: {
+      type: String,
+      default: 'normal'
+    }
   },
   methods: {
     changePage (index) {
@@ -111,7 +115,6 @@ export default {
 .controller-item:hover {
     background-color: rgba(255, 255, 255, 1);
 }
-
 .prev-btn,.next-btn {
   cursor: pointer;
   display: block;
@@ -125,16 +128,56 @@ export default {
   background-color: transparent;
   outline: none;
 }
+.prev-btn {
+  top: 80px;
+  transform: rotate(-45deg);
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+}
 .next-btn {
   bottom: 80px;
   transform: rotate(45deg);
   border-top-color: transparent;
   border-left-color: transparent;
 }
-.prev-btn {
-  top: 80px;
-  transform: rotate(-45deg);
-  border-bottom-color: transparent;
-  border-left-color: transparent;
+.prev-btn.moving {
+  animation: prev-up-down 0.7s linear 0s infinite;
+}
+.next-btn.moving {
+  animation: next-up-down 0.7s linear 0s infinite;
+}
+@keyframes next-up-down {
+  0% {
+    transform: translate3d(0,0,0) rotate(45deg);
+  }
+  25% {
+    transform: translate3d(0,6px,0) rotate(45deg);
+  }
+  50% {
+    transform: translate3d(0,0,0) rotate(45deg);
+  }
+  75% {
+    transform: translate3d(0,-6px,0) rotate(45deg);
+  }
+  100% {
+    transform: translate3d(0,0,0) rotate(45deg);
+  }
+}
+@keyframes prev-up-down {
+  0% {
+    transform: translate3d(0,0,0) rotate(-45deg);
+  }
+  25% {
+    transform: translate3d(0,-6px,0) rotate(-45deg);
+  }
+  50% {
+    transform: translate3d(0,0,0) rotate(-45deg);
+  }
+  75% {
+    transform: translate3d(0,6px,0) rotate(-45deg);
+  }
+  100% {
+    transform: translate3d(0,0,0) rotate(-45deg);
+  }
 }
 </style>

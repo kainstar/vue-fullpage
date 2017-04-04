@@ -1,9 +1,9 @@
 <template>
   <div id="app" class="app">
     <page :currentPage="currentPage">
-      <h1 class="text-center">Vue-FullPage</h1>
+      <h1 class="text-center">项目介绍</h1>
       <section>
-        <p class="demo-intro">Vue-FullPage是一个使用Vue制作的全屏页面模板，是为了学习Vue（顺便做简历）而制作的一个Vue项目</p>
+        <p class="demo-intro">Vue-FullPage是一个使用Vue制作的全屏页面模板，是为了学习Vue而制作的一个Vue项目</p>
         <p class="demo-intro">使用到的相关npm包有：
           <a href="https://github.com/vuejs/vue-cli" target="_blank">vue-cli</a>、
           <a href="https://github.com/vuejs-templates/webpack-simple" target="_blank">webpack-simple模板</a>
@@ -14,16 +14,20 @@
     <page :currentPage="currentPage">
       <h1 class="text-center">配置说明</h1>
       <section>
-        <p>在App.vue中修改data函数返回的内容，即为修改相应的配置。现在可以配置两个属性：currentPage和options</p>
+        <p>在App.vue中修改data函数返回的内容，即为修改相应的配置。现在可以配置三个属性：currentPage、arrowAnimation和options</p>
         <dl>
           <dt>currentPage:</dt>
           <dd>表示当前显示的页面，通过设置currentPage可以改变初始显示的界面</dd>
         </dl>
         <dl>
+          <dt>arrowsType:</dt>
+          <dd>表示页面控制器的上下箭头显示类型：no（不显示箭头）、normal（显示箭头）、animate（显示有动画效果的箭头）</dd>
+        </dl>
+        <dl>
           <dt>options:</dt>
           <dd>该属性是一个数组，数组的每一项都是一个对象，通过设置对象内的值，可以改变对应的page组件的样式
             <ul>
-              <li><span class="text-bold">bgColor:</span> 表示相应page的背景颜色</li>
+              <li><span class="text-bold">background:</span> 表示相应page的背景样式</li>
               <li><span class="text-bold">color:</span> 表示相应page的文字颜色（可以手动设置css样式覆盖）</li>
               <li><span class="text-bold">isCenter:</span> 表示相应page的内容是否居中（水平和垂直都包括）</li>
               <li>下一页介绍options内的方法属性</li>
@@ -52,7 +56,7 @@
         <p>我的Github：<a href="https://github.com/hzxszsk" target="_blank">https://github.com/hzxszsk</a></p>
       </section>
     </page>
-    <page-controller :pageNum="pageNum" :currentPage="currentPage" @changePage="changePage"></page-controller>
+    <page-controller :pageNum="pageNum" :currentPage="currentPage" @changePage="changePage" :arrowsType="arrowsType"></page-controller>
   </div>
 </template>
 
@@ -67,13 +71,13 @@ export default {
       currentPage: 1,
       options: [{
         // the color of background
-        bgColor: 'rgba(229, 199, 46, 1)',
+        background: 'rgba(229, 199, 46, 1)',
         // the color of text
         color: '#fff',
         // is content center
         isCenter: true,
       },{
-        bgColor: 'rgba(94, 233, 90, 1)',
+        background: 'rgba(94, 233, 90, 1)',
         color: '#fff',
         isCenter: true,
         // the function before page show
@@ -87,14 +91,15 @@ export default {
           console.log('enter');
         }
       },{
-        bgColor: 'rgba(233, 84, 84, 1)',
+        background: 'rgba(233, 84, 84, 1)',
         color: '#fff',
         isCenter: true
       },{
-        bgColor: 'rgba(46, 153, 229, 1)',
+        background: 'rgba(46, 153, 229, 1)',
         color: '#fff',
         isCenter: true
-      }]
+      }],
+      arrowsType: 'animate'
     }
   },
   computed: {
@@ -105,11 +110,13 @@ export default {
   },
   methods: {
     changePage (index) {
+      // beforeLeave
       let beforeIndex = this.currentPage - 1;
       let leaveFunction = this.options[beforeIndex].beforeLeave;
       typeof leaveFunction === 'function' && leaveFunction(this.$children[beforeIndex]);
       // 改变page
       this.currentPage = index;
+      // afterEnter
       let nextIndex = index-1;
       let enterFunction = this.options[nextIndex].afterEnter;
       this.$nextTick(function () {

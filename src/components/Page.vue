@@ -1,6 +1,6 @@
 <template>
     <section class="page" v-if="options"
-    :style="{backgroundColor:options.bgColor,color:options.color||'#fff'}" 
+    :style="{background:options.background,color:options.color||'#fff'}" 
     :class="{'page-before': options.index < currentPage,'page-after': options.index > currentPage}">
         <div :class="{'page-center': options.isCenter}">
             <slot></slot>
