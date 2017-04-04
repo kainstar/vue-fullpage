@@ -26,9 +26,21 @@
               <li><span class="text-bold">bgColor:</span> 表示相应page的背景颜色</li>
               <li><span class="text-bold">color:</span> 表示相应page的文字颜色（可以手动设置css样式覆盖）</li>
               <li><span class="text-bold">isCenter:</span> 表示相应page的内容是否居中（水平和垂直都包括）</li>
+              <li>下一页介绍options内的方法属性</li>
             </ul>
           </dd>
         </dl>
+      </section>
+    </page>
+    <page :currentPage="currentPage">
+      <h1 class="text-center">方法说明</h1>
+      <section>
+        <p>在每个options中，可以设置两种方法：beforeLeave 和 afterEnter</p>
+        <ul>
+          <li>beforeLeave 方法表示在离开当前页面前所做的操作</li>
+          <li>afterEnter 方法表示在进入当前页面后所做的操作</li>
+        </ul>
+        <p>这两个方法都有一个参数，该参数为当前页面的vue组件实例</p>
       </section>
     </page>
     <page :currentPage="currentPage">
@@ -54,11 +66,28 @@ export default {
     return {
       currentPage: 1,
       options: [{
+        // the color of background
         bgColor: 'rgba(229, 199, 46, 1)',
+        // the color of text
         color: '#fff',
-        isCenter: true
+        // is content center
+        isCenter: true,
       },{
         bgColor: 'rgba(94, 233, 90, 1)',
+        color: '#fff',
+        isCenter: true,
+        // the function before page show
+        beforeLeave ($child) {
+          console.log($child);
+          console.log('leave');
+        },
+        // the function after page show
+        afterEnter ($child) {
+          console.log($child);
+          console.log('enter');
+        }
+      },{
+        bgColor: 'rgba(233, 84, 84, 1)',
         color: '#fff',
         isCenter: true
       },{
@@ -76,19 +105,27 @@ export default {
   },
   methods: {
     changePage (index) {
+      let beforeIndex = this.currentPage - 1;
+      let leaveFunction = this.options[beforeIndex].beforeLeave;
+      typeof leaveFunction === 'function' && leaveFunction(this.$children[beforeIndex]);
+      // 改变page
       this.currentPage = index;
+      let nextIndex = index-1;
+      let enterFunction = this.options[nextIndex].afterEnter;
+      this.$nextTick(function () {
+        typeof enterFunction === 'function' && enterFunction(this.$children[nextIndex]);
+      })
     }
   },
   components: {
     Page, PageController
   },
   mounted () {
-    let _this = this;
     this.$children.forEach((child, index) => {
       // 动态设置各个page内的options
       if (child.options === null) {
         let childOptions = this.options[index];
-        childOptions.index = index + 1;
+        this.$set(childOptions,'index',index+1);
         child.options = childOptions;
       }
     });

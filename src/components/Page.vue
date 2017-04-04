@@ -1,8 +1,8 @@
 <template>
-    <section class="page" v-if="options !== null"
+    <section class="page" v-if="options"
     :style="{backgroundColor:options.bgColor,color:options.color||'#fff'}" 
     :class="{'page-before': options.index < currentPage,'page-after': options.index > currentPage}">
-        <div :class="{'page-content': options.isCenter}">
+        <div :class="{'page-center': options.isCenter}">
             <slot></slot>
         </div>
     </section>
@@ -19,8 +19,6 @@ export default {
         return {
             options: null
         }
-    },
-    computed: {
     }
 }
 </script>
@@ -33,7 +31,7 @@ export default {
     transition: all 0.5s ease 0s;
 }
 /* 水平、垂直居中 */
-.page-content {
+.page-center {
     overflow: hidden;
     position: absolute;
     top: 50%;

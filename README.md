@@ -44,3 +44,7 @@ npm run build
 2. color: 表示相应page的文字颜色（可以手动设置css样式覆盖）
 
 3. isCenter: 表示相应page的内容是否居中（水平和垂直都包括）
+
+4. beforeLeave 该方法表示在离开当前页面前所做的操作（参数为当前页面的vue组件实例）
+
+5. afterEnter 方法表示在进入当前页面后所做的操作（参数为当前页面的vue组件实例）

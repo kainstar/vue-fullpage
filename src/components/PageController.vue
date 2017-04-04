@@ -22,22 +22,18 @@ export default {
   },
   computed: {
     nextIndex () {
-      let nextIndex = this.currentPage;
-      if (nextIndex === this.pageNum) {
-        nextIndex = 1;
+      if (this.currentPage === this.pageNum) {
+        return 1;
       } else {
-        nextIndex++;
+        return this.currentPage + 1;
       }
-      return nextIndex;
     },
     prevIndex () {
-      let prevIndex = this.currentPage;
-      if (prevIndex === 1) {
-        prevIndex = this.pageNum;
+      if (this.currentPage === 1) {
+        return this.pageNum;
       } else {
-        prevIndex--;
+        return this.currentPage - 1;
       }
-      return prevIndex;
     }
   },
   mounted () {
