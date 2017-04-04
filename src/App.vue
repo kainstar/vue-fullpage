@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div id="app" class="app">
     <page :currentPage="currentPage">
       <h1 class="text-center">项目介绍</h1>
@@ -50,7 +50,7 @@
     <page :currentPage="currentPage">
       <h1 class="text-center">作者信息</h1>
       <section>
-        <img class="avatar" src="./assets/avatar.jpg" alt="头像">
+        <img class="avatar" :src="avatar" alt="头像">
         <p>昵称：KainStar</p>
         <p>学校：南京理工大学</p>
         <p>我的Github：<a href="https://github.com/hzxszsk" target="_blank">https://github.com/hzxszsk</a></p>
@@ -99,7 +99,8 @@ export default {
         color: '#fff',
         isCenter: true
       }],
-      arrowsType: 'animate'
+      arrowsType: 'animate',
+      avatar: require('./assets/avatar.jpg')
     }
   },
   computed: {
