@@ -1,10 +1,10 @@
 <template>
     <nav class="controller">
-        <button v-if="arrowsType != 'no'" class="prev-btn" :class="{moving:arrowsType === 'animate'}" @click="changePage(prevIndex)"></button>
+        <button v-if="option.arrowsType != 'no'" class="prev-btn" :class="{moving:option.arrowsType === 'animate'}" @click="changePage(prevIndex)"></button>
         <ul>
             <li @click="changePage(index)" v-for="index in pageNum" :key="'controller-'+index" class="controller-item"></li>
         </ul>
-        <button v-if="arrowsType != 'no'" class="next-btn" :class="{moving:arrowsType === 'animate'}" @click="changePage(nextIndex)"></button>
+        <button v-if="option.arrowsType != 'no'" class="next-btn" :class="{moving:option.arrowsType === 'animate'}" @click="changePage(nextIndex)"></button>
     </nav>
 </template>
 
@@ -14,10 +14,7 @@ export default {
   props: {
     pageNum: Number,
     currentPage: Number,
-    arrowsType: {
-      type: String,
-      default: 'normal'
-    }
+    option: Object
   },
   methods: {
     changePage (index) {

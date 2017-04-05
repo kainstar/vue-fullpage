@@ -1,8 +1,8 @@
 <template>
-    <section class="page" v-if="options"
-    :style="{background:options.background,color:options.color||'#fff'}" 
-    :class="{'page-before': options.index < currentPage,'page-after': options.index > currentPage}">
-        <div :class="{'page-center': options.isCenter}">
+    <section class="page" v-if="option"
+    :style="{background:option.background,color:option.color||'#fff'}" 
+    :class="{'page-before': option.index < currentPage,'page-after': option.index > currentPage}">
+        <div :class="{'page-center': option.isCenter}">
             <slot></slot>
         </div>
     </section>
@@ -17,7 +17,7 @@ export default {
     },
     data () {
         return {
-            options: null
+            option: null
         }
     }
 }
@@ -37,6 +37,11 @@ export default {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+@media screen and (max-width:768px) {
+    .page-center {
+        width: 100%;
+    }
 }
 .page-before {
     transform: translate3d(0,-100%,0);
