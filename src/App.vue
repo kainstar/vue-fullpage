@@ -2,7 +2,7 @@
   <div id="app" class="app">
     <page :currentPage="currentPage">
       <h1 class="text-center">项目介绍</h1>
-      <section>
+      <section class="animate" ref="section1">
         <p class="demo-intro">Vue-FullPage是一个使用Vue制作的全屏页面模板，是为了学习Vue而制作的一个Vue项目</p>
         <p class="demo-intro">使用到的相关npm包有：
           <a href="https://github.com/vuejs/vue-cli" target="_blank">vue-cli</a>、
@@ -13,19 +13,23 @@
     </page>
     <page :currentPage="currentPage">
       <h1 class="text-center">配置说明</h1>
-      <section>
+      <section ref="section2" class="animate move-left">
         <p>在App.vue中修改data函数返回的内容，即为修改相应的配置。现在可以配置三个属性：currentPage、arrowAnimation和options</p>
         <dl>
           <dt>currentPage:</dt>
           <dd>表示当前显示的页面，通过设置currentPage可以改变初始显示的界面</dd>
         </dl>
         <dl>
-          <dt>arrowsType:</dt>
-          <dd>表示页面控制器的上下箭头显示类型：no（不显示箭头）、normal（显示箭头）、animate（显示有动画效果的箭头）</dd>
+          <dt>controllerOption:</dt>
+          <dd>该属性表示控制器的配置属性，可以自由扩展
+            <ul>
+              <li>arrowsType表示页面控制器的上下箭头显示类型：no（不显示箭头）、normal（显示箭头）、animate（显示有动画效果的箭头）</li>
+            </ul>
+          </dd>
         </dl>
         <dl>
           <dt>options:</dt>
-          <dd>该属性是一个数组，数组的每一项都是一个对象，通过设置对象内的值，可以改变对应的page组件的样式
+          <dd>该属性是一个数组，数组的每一项都是一个对象，通过设置对象内的值，可以改变对应的page组件的样式，可以自由扩展
             <ul>
               <li><span class="text-bold">background:</span> 表示相应page的背景样式</li>
               <li><span class="text-bold">color:</span> 表示相应page的文字颜色（可以手动设置css样式覆盖）</li>
@@ -38,25 +42,30 @@
     </page>
     <page :currentPage="currentPage">
       <h1 class="text-center">方法说明</h1>
-      <section>
-        <p>在每个options中，可以设置两种方法：beforeLeave 和 afterEnter</p>
+      <section ref="section3" class="animate move-left">
+        <p>在每个options的对象中，可以设置两种方法：beforeLeave 和 afterEnter</p>
         <ul>
           <li>beforeLeave 方法表示在离开当前页面前所做的操作</li>
           <li>afterEnter 方法表示在进入当前页面后所做的操作</li>
         </ul>
-        <p>这两个方法都有一个参数，该参数为当前页面的vue组件实例</p>
+        <p>这两个方法都有一个默认参数，该参数为当前Page的vue组件实例，方法的this为App.vue的组件实例</p>
       </section>
     </page>
     <page :currentPage="currentPage">
       <h1 class="text-center">作者信息</h1>
-      <section>
-        <img class="avatar" :src="avatar" alt="头像">
-        <p>昵称：KainStar</p>
-        <p>学校：南京理工大学</p>
-        <p>我的Github：<a href="https://github.com/hzxszsk" target="_blank">https://github.com/hzxszsk</a></p>
+      <section ref="section4" class="animate move-left">
+        <img class="avatar" src="./assets/avatar.jpg" alt="头像">
+        <div class="author-info">
+          <p>昵称：KainStar</p>
+          <p>学校：南京理工大学</p>
+          <p>项目地址：
+            <a href="https://github.com/hzxszsk/vue-fullpage" target="_blank">https://github.com/hzxszsk/vue-fullpage</a>
+          </p>
+          <p>我的Github：<a href="https://github.com/hzxszsk" target="_blank">https://github.com/hzxszsk</a></p>
+        </div>
       </section>
     </page>
-    <page-controller :pageNum="pageNum" :currentPage="currentPage" @changePage="changePage" :arrowsType="arrowsType"></page-controller>
+    <page-controller :pageNum="pageNum" :currentPage="currentPage" @changePage="changePage" :option="controllerOption"></page-controller>
   </div>
 </template>
 
@@ -76,31 +85,53 @@ export default {
         color: '#fff',
         // is content center
         isCenter: true,
-      },{
-        background: 'rgba(94, 233, 90, 1)',
-        color: '#fff',
-        isCenter: true,
         // the function before page show
-        beforeLeave ($child) {
-          console.log($child);
-          console.log('leave');
+        afterEnter ($child) {
+          this.$refs.section1.classList.remove('move-left','move-right');
         },
         // the function after page show
+        beforeLeave ($child) {
+          let moveType = Math.random()>0.5?'move-left':'move-right';
+          this.$refs.section1.classList.add(moveType);
+        }
+      },{
+        background: 'rgba(79, 204, 76, 1)',
+        color: '#fff',
+        isCenter: true,
         afterEnter ($child) {
-          console.log($child);
-          console.log('enter');
+          this.$refs.section2.classList.remove('move-left','move-right');
+        },
+        beforeLeave ($child) {
+          let moveType = Math.random()>0.5?'move-left':'move-right';
+          this.$refs.section2.classList.add(moveType);
         }
       },{
         background: 'rgba(233, 84, 84, 1)',
         color: '#fff',
-        isCenter: true
+        isCenter: true,
+        afterEnter ($child) {
+          this.$refs.section3.classList.remove('move-left','move-right');
+        },
+        beforeLeave ($child) {
+          let moveType = Math.random()>0.5?'move-left':'move-right';
+          this.$refs.section3.classList.add(moveType);
+        }
       },{
         background: 'rgba(46, 153, 229, 1)',
         color: '#fff',
-        isCenter: true
+        isCenter: true,
+        afterEnter ($child) {
+          this.$refs.section4.classList.remove('move-left','move-right');
+        },
+        beforeLeave ($child) {
+          let moveType = Math.random()>0.5?'move-left':'move-right';
+          this.$refs.section4.classList.add(moveType);
+        }
       }],
-      arrowsType: 'animate',
-      avatar: require('./assets/avatar.jpg')
+      avatar: require('./assets/avatar.jpg'),
+      controllerOption: {
+        arrowsType: 'animate'
+      }
     }
   },
   computed: {
@@ -111,17 +142,17 @@ export default {
   },
   methods: {
     changePage (index) {
-      // beforeLeave
+      // beforeLeave Hook
       let beforeIndex = this.currentPage - 1;
       let leaveFunction = this.options[beforeIndex].beforeLeave;
-      typeof leaveFunction === 'function' && leaveFunction(this.$children[beforeIndex]);
+      typeof leaveFunction === 'function' && leaveFunction.call(this,this.$children[beforeIndex]);
       // 改变page
       this.currentPage = index;
-      // afterEnter
+      // afterEnter Hook
       let nextIndex = index-1;
       let enterFunction = this.options[nextIndex].afterEnter;
       this.$nextTick(function () {
-        typeof enterFunction === 'function' && enterFunction(this.$children[nextIndex]);
+        typeof enterFunction === 'function' && enterFunction.call(this,this.$children[nextIndex]);
       })
     }
   },
@@ -131,10 +162,10 @@ export default {
   mounted () {
     this.$children.forEach((child, index) => {
       // 动态设置各个page内的options
-      if (child.options === null) {
-        let childOptions = this.options[index];
-        this.$set(childOptions,'index',index+1);
-        child.options = childOptions;
+      if (child.option === null) {
+        let childOption = this.options[index];
+        this.$set(childOption,'index',index+1);
+        child.option = childOption;
       }
     });
   }
@@ -158,7 +189,23 @@ html,body {
   width: 100%;
 }
 
+
 /* 下面的是与fullPage无关的样式 */
+.animate {
+  transition: all 1s ease-out 0s;
+}
+.move-left {
+  transform: translateX(-1000%); 
+}
+.move-right {
+  transform: translateX(1000%);
+}
+
+@media screen and (max-width:768px) {
+  html,body {
+    font-size: 12px;
+  }
+}
 a {
   text-decoration: none;
   color: inherit;
@@ -208,5 +255,8 @@ ul {
   margin: 10px auto;
   display: block;
   box-shadow: 1px 1px 5px #666;
+}
+.author-info {
+  text-align: center;
 }
 </style>
