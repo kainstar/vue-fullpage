@@ -25,6 +25,7 @@ export default {
 
 <style>
 .page {
+    overflow: hidden;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -32,7 +33,6 @@ export default {
 }
 /* 水平、垂直居中 */
 .page-center {
-    overflow: hidden;
     position: absolute;
     top: 50%;
     left: 50%;
