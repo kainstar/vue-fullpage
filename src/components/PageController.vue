@@ -57,15 +57,19 @@ export default {
         timer = null;
       }, 500);
     }
-    // 监听滚轮事件
-    window.addEventListener('mousewheel',function (event) {   // IE/Opera/Chrome
-      let direction = event.wheelDelta > 0 ? 'up':'down';
-      scrollHandler(direction);
-    },false);
-    window.addEventListener('DOMMouseScroll',function (event) {   // Firefox
-      let direction = event.detail > 0 ? 'up':'down';
-      scrollHandler(direction);
-    },false);
+    // if (Object.hasOwnProperty.call(window,'onmousewheel')) {
+    if (Object.hasOwnProperty.call(window,'onmousewheel')) {
+      // 监听滚轮事件
+      window.addEventListener('mousewheel',function (event) {   // IE/Opera/Chrome
+        let direction = event.wheelDelta > 0 ? 'up':'down';
+        scrollHandler(direction);
+      },false);
+    } else {
+      window.addEventListener('DOMMouseScroll',function (event) {   // Firefox
+        let direction = event.detail > 0 ? 'up':'down';
+        scrollHandler(direction);
+      },false);
+    }
     // 移动端触摸事件处理
     window.addEventListener('touchstart', function (event) {
       start = event.touches[0].clientY;
