@@ -129,7 +129,8 @@ export default {
         }
       }],
       controllerOption: {
-        arrowsType: 'animate'
+        arrowsType: 'animate',
+        navbar: true
       }
     }
   },

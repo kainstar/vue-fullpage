@@ -1,8 +1,8 @@
 <template>
     <nav class="controller">
         <button v-if="option.arrowsType != 'no'" class="prev-btn" :class="{moving:option.arrowsType === 'animate'}" @click="changePage(prevIndex)"></button>
-        <ul>
-            <li @click="changePage(index)" v-for="index in pageNum" :key="'controller-'+index" class="controller-item"></li>
+        <ul @click="selectPage" v-if="option.navbar">
+            <li v-for="index in pageNum" :key="'controller-'+index" :data-index="index" class="controller-item"></li>
         </ul>
         <button v-if="option.arrowsType != 'no'" class="next-btn" :class="{moving:option.arrowsType === 'animate'}" @click="changePage(nextIndex)"></button>
     </nav>
@@ -14,9 +14,21 @@ export default {
   props: {
     pageNum: Number,
     currentPage: Number,
-    option: Object
+    option: {
+      type: Object,
+      default: {
+        arrowsType: 'animate',
+        navbar: true
+      }
+    }
   },
   methods: {
+    selectPage (event) {
+      let li = event.target;
+      if (li.nodeName.toLowerCase() === 'li') {
+        this.changePage(parseInt(li.dataset.index));
+      }
+    },
     changePage (index) {
       this.$emit('changePage', index);
     }
@@ -37,6 +49,11 @@ export default {
       }
     }
   },
+  created () {
+    if (this.option.navbar === undefined) {
+      this.option.navbar = true;
+    }
+  },
   mounted () {
     let _this = this;
     let timer = null;
@@ -55,7 +72,7 @@ export default {
       timer = setTimeout(function() {
         clearTimeout(timer);
         timer = null;
-      }, 500);
+      }, 300);
     }
     // if (Object.hasOwnProperty.call(window,'onmousewheel')) {
     if (Object.hasOwnProperty.call(window,'onmousewheel')) {

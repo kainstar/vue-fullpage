@@ -38,11 +38,6 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%);
 }
-@media screen and (max-width:768px) {
-    .page-center {
-        width: 100%;
-    }
-}
 .page-before {
     transform: translate3d(0,-100%,0);
 }
