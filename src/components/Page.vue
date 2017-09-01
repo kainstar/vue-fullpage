@@ -1,8 +1,10 @@
 <template>
-    <section class="page" v-if="option"
-    :style="{background:option.background,color:option.color||'#fff'}" 
-    :class="{'page-before': option.index < currentPage,'page-after': option.index > currentPage}">
-        <div :class="{'page-center': option.isCenter}">
+    <section class="page" v-if="option" 
+        :style="{background: option.background,color: option.color||'#fff'}"      
+        :class="{'page-before': option.index < currentPage,
+                'page-after': option.index > currentPage,
+                'page-current': option.index === currentPage}">
+        <div :class="{'all-center': option.isCenter}">
             <slot></slot>
         </div>
     </section>
@@ -15,7 +17,7 @@ export default {
     props: {
         currentPage: Number
     },
-    data () {
+    data() {
         return {
             option: null
         }
@@ -31,17 +33,21 @@ export default {
     height: 100%;
     transition: all 0.5s ease 0s;
 }
+
+.page-before {
+    transform: translate3d(0, -100%, 0);
+}
+
+.page-after {
+    transform: translate3d(0, 100%, 0);
+}
+
+
 /* 水平、垂直居中 */
-.page-center {
+.all-center {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-}
-.page-before {
-    transform: translate3d(0,-100%,0);
-}
-.page-after {
-    transform: translate3d(0,100%,0);
 }
 </style>

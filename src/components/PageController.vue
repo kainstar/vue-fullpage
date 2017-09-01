@@ -1,10 +1,10 @@
 <template>
     <nav class="controller">
-        <button v-if="option.arrowsType != 'no'" class="prev-btn" :class="{moving:option.arrowsType === 'animate'}" @click="changePage(prevIndex)"></button>
-        <ul @click="selectPage" v-if="option.navbar">
-            <li v-for="index in pageNum" :key="'controller-'+index" :data-index="index" class="controller-item"></li>
+        <button v-if="option.arrowsType" class="prev-btn" :class="{moving:option.arrowsType === 'animate'}" @click="changePage(prevIndex)"></button>
+        <ul v-if="option.navbar">
+            <li v-for="index in pageNum" @click="changePage(index)" :class="{current:option.highlight && index === currentPage}" :key="'controller-'+index" :data-index="index" class="controller-item"></li>
         </ul>
-        <button v-if="option.arrowsType != 'no'" class="next-btn" :class="{moving:option.arrowsType === 'animate'}" @click="changePage(nextIndex)"></button>
+        <button v-if="option.arrowsType" class="next-btn" :class="{moving:option.arrowsType === 'animate'}" @click="changePage(nextIndex)"></button>
     </nav>
 </template>
 
@@ -19,17 +19,12 @@ export default {
       default: {
         arrowsType: 'animate',
         navbar: true,
-        loop:true        //是否开启滚动循环
+        highlight: true,
+        loop: true        //是否开启滚动循环
       }
     }
   },
   methods: {
-    selectPage (event) {
-      let li = event.target;
-      if (li.nodeName.toLowerCase() === 'li') {
-        this.changePage(parseInt(li.dataset.index));
-      }
-    },
     changePage (index) {
       this.$emit('changePage', index);
     }
@@ -118,7 +113,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .controller {
     position: fixed;
     right: 20px;
@@ -140,6 +135,9 @@ export default {
     transition: background-color 0.3s ease 0s;
 }
 .controller-item:hover {
+    background-color: rgba(255, 255, 255, 0.7);
+}
+.controller-item.current {
     background-color: rgba(255, 255, 255, 1);
 }
 .prev-btn,.next-btn {
