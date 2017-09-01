@@ -18,7 +18,8 @@ export default {
       type: Object,
       default: {
         arrowsType: 'animate',
-        navbar: true
+        navbar: true,
+        loop:true        //是否开启滚动循环
       }
     }
   },
@@ -36,14 +37,22 @@ export default {
   computed: {
     nextIndex () {
       if (this.currentPage === this.pageNum) {
-        return 1;
+        if(this.option.loop){
+            return 1
+          }else{
+            return this.pageNum
+          }
       } else {
         return this.currentPage + 1;
       }
     },
     prevIndex () {
       if (this.currentPage === 1) {
-        return this.pageNum;
+        if(this.option.loop){
+            this.pageNum
+          }else{
+            return 1
+          }
       } else {
         return this.currentPage - 1;
       }
