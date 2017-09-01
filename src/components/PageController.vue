@@ -1,10 +1,10 @@
 <template>
     <nav class="controller">
-        <button v-if="option.arrowsType != 'no'" class="prev-btn" :class="{moving:option.arrowsType === 'animate'}" @click="changePage(prevIndex)"></button>
-        <ul>
-            <li @click="changePage(index)" v-for="index in pageNum" :key="'controller-'+index" class="controller-item"></li>
+        <button v-if="option.arrowsType" class="prev-btn" :class="{moving:option.arrowsType === 'animate'}" @click="changePage(prevIndex)"></button>
+        <ul v-if="option.navbar">
+            <li v-for="index in pageNum" @click="changePage(index)" :class="{current:option.highlight && index === currentPage}" :key="'controller-'+index" :data-index="index" class="controller-item"></li>
         </ul>
-        <button v-if="option.arrowsType != 'no'" class="next-btn" :class="{moving:option.arrowsType === 'animate'}" @click="changePage(nextIndex)"></button>
+        <button v-if="option.arrowsType" class="next-btn" :class="{moving:option.arrowsType === 'animate'}" @click="changePage(nextIndex)"></button>
     </nav>
 </template>
 
@@ -14,7 +14,15 @@ export default {
   props: {
     pageNum: Number,
     currentPage: Number,
-    option: Object
+    option: {
+      type: Object,
+      default: {
+        arrowsType: 'animate',
+        navbar: true,
+        highlight: true,
+        loop: true        //是否开启滚动循环
+      }
+    }
   },
   methods: {
     changePage (index) {
@@ -24,17 +32,30 @@ export default {
   computed: {
     nextIndex () {
       if (this.currentPage === this.pageNum) {
-        return 1;
+        if(this.option.loop){
+            return 1
+          }else{
+            return this.pageNum
+          }
       } else {
         return this.currentPage + 1;
       }
     },
     prevIndex () {
       if (this.currentPage === 1) {
-        return this.pageNum;
+        if(this.option.loop){
+            this.pageNum
+          }else{
+            return 1
+          }
       } else {
         return this.currentPage - 1;
       }
+    }
+  },
+  created () {
+    if (this.option.navbar === undefined) {
+      this.option.navbar = true;
     }
   },
   mounted () {
@@ -55,17 +76,21 @@ export default {
       timer = setTimeout(function() {
         clearTimeout(timer);
         timer = null;
-      }, 500);
+      }, 300);
     }
-    // 监听滚轮事件
-    window.addEventListener('mousewheel',function (event) {   // IE/Opera/Chrome
-      let direction = event.wheelDelta > 0 ? 'up':'down';
-      scrollHandler(direction);
-    },false);
-    window.addEventListener('DOMMouseScroll',function (event) {   // Firefox
-      let direction = event.detail > 0 ? 'up':'down';
-      scrollHandler(direction);
-    },false);
+    // if (Object.hasOwnProperty.call(window,'onmousewheel')) {
+    if (Object.hasOwnProperty.call(window,'onmousewheel')) {
+      // 监听滚轮事件
+      window.addEventListener('mousewheel',function (event) {   // IE/Opera/Chrome
+        let direction = event.wheelDelta > 0 ? 'up':'down';
+        scrollHandler(direction);
+      },false);
+    } else {
+      window.addEventListener('DOMMouseScroll',function (event) {   // Firefox
+        let direction = event.detail > 0 ? 'up':'down';
+        scrollHandler(direction);
+      },false);
+    }
     // 移动端触摸事件处理
     window.addEventListener('touchstart', function (event) {
       start = event.touches[0].clientY;
@@ -88,7 +113,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .controller {
     position: fixed;
     right: 20px;
@@ -110,6 +135,9 @@ export default {
     transition: background-color 0.3s ease 0s;
 }
 .controller-item:hover {
+    background-color: rgba(255, 255, 255, 0.7);
+}
+.controller-item.current {
     background-color: rgba(255, 255, 255, 1);
 }
 .prev-btn,.next-btn {
