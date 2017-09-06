@@ -44,7 +44,7 @@ export default {
     prevIndex () {
       if (this.currentPage === 1) {
         if(this.option.loop){
-            this.pageNum
+            return this.pageNum
           }else{
             return 1
           }
