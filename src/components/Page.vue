@@ -28,17 +28,22 @@ export default {
 <style>
 .page {
     overflow: hidden;
-    position: absolute;
-    width: 100%;
-    height: 100%;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     transition: all 0.5s ease 0s;
+    z-index: 1;
 }
 
 .page-before {
+    z-index: 0;
     transform: translate3d(0, -100%, 0);
 }
 
 .page-after {
+    z-index: 0;
     transform: translate3d(0, 100%, 0);
 }
 

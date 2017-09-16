@@ -118,6 +118,7 @@ export default {
     position: fixed;
     right: 20px;
     top: 50%;
+    z-index: 99;
 }
 .controller ul {
     transform: translate3d(0,-50%,0);
